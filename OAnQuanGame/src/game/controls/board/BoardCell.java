@@ -19,6 +19,10 @@ public class BoardCell {
 		}
 	}
 	
+	public ArrayList<Stone> getStonesInCell() {
+		return this.stonesInCell;
+	}
+	
 	public int getNumberOfStones() {
 		return this.stonesInCell.size();
 	}

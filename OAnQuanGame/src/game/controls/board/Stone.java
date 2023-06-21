@@ -7,10 +7,10 @@ public class Stone {
 	public Stone(boolean isQuan) {
 		this.isQuan = isQuan;
 		if(isQuan) {
-			this.value = 1;
+			this.value = 10;
 		}
 		else {
-			this.value = 5;
+			this.value = 1;
 		}
 	}
 	

@@ -7,12 +7,12 @@ import java.awt.event.*;
 import game.controls.board.*;
 
 public class MainWindow extends JFrame{
-	private BoardDrawer myBD;
+	private GameCanvas myGC;
 	//private JMenuBar myMB;
 	
 	public MainWindow(Board b) {
-		myBD = new BoardDrawer(b);
-		add(myBD, BorderLayout.CENTER);
+		myGC = new GameCanvas(b);
+		add(myGC, BorderLayout.CENTER);
 		
 		setVisible(true);
 		setSize(800, 600);
@@ -23,6 +23,9 @@ public class MainWindow extends JFrame{
 	
 	public static void main(String[] args) {
 		Board b = new Board();
-		new MainWindow(b);
+		MainWindow myWindow = new MainWindow(b);
+		while(true) {
+			myWindow.myGC.repaint();
+		}
 	}
 }
