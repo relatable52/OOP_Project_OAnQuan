@@ -6,10 +6,12 @@ import java.awt.event.*;
 import java.lang.Math;
 import java.util.*;
 
+import game.controls.Game;
 import game.controls.board.*;
 
 public class BoardDrawer extends Drawer {
 	private Board myBoard;
+	private Game myGame;
 	private int cellSize = 100;
 	private int danRadius = 5;
 	private int quanRadius = 15;
@@ -30,12 +32,30 @@ public class BoardDrawer extends Drawer {
 		this.quanRadius = quan;
 	}
 	
+	public BoardDrawer(Game myGame, JPanel cp) {
+		super(cp);
+		this.myGame = myGame;
+		this.myBoard = myGame.getBoard();
+	}
+	
+	public BoardDrawer(Game myGame, JPanel cp, int size, int dan, int quan) {
+		super(cp);
+		this.myGame = myGame;
+		this.myBoard = myGame.getBoard();
+		
+		this.cellSize = size;
+		this.danRadius = dan;
+		this.quanRadius = quan;
+	}
+	
 	public void draw() {
 		Graphics2D graphic2d = (Graphics2D) this.myG;
 		setup(graphic2d);
 		drawBoardLines(graphic2d);
 		drawStones(graphic2d);
-		highlightCell(graphic2d);
+		if(isValidMove()) {
+			highlightCell(graphic2d);
+		}
 		mousePressed();
 	}
 	
@@ -71,7 +91,7 @@ public class BoardDrawer extends Drawer {
 	private void drawInDan(Graphics2D g, int ind, BoardCell cell) {
 		g.setColor(Color.BLACK);
 		ArrayList<Stone> stones = cell.getStonesInCell();
-		int ord = (ind<5)?ind:(ind-1);
+		int ord = (ind<5)?ind:(5+(9-(ind-1)));
 		int num = stones.size();
 		int side = (int)Math.ceil(Math.sqrt(num));
 		int d = (int)(this.cellSize*0.9/(side+1));
@@ -92,7 +112,7 @@ public class BoardDrawer extends Drawer {
 	private void drawInQuan(Graphics2D g, int ind, BoardCell cell) {
 		g.setColor(Color.BLACK);
 		ArrayList<Stone> stones = cell.getStonesInCell();
-		int ord = (ind > 5) ? 1:(-1);
+		int ord = (ind > 5) ? (-1):(1);
 		int num = stones.size();
 		int side = (int)Math.ceil(Math.sqrt(num/1.5));
 		int d = (int)(this.cellSize*0.8/(side+1));
@@ -119,6 +139,11 @@ public class BoardDrawer extends Drawer {
 		return i;
 	}
 	
+	public int onCellControl() {
+		int oc = onCell();
+		return (oc>4)?(oc+1):oc;
+	}
+	
 	public void highlightCell(Graphics2D g) {
 		g.setColor(Color.BLUE);
 		int i = onCell();
@@ -135,7 +160,20 @@ public class BoardDrawer extends Drawer {
 		}
 	}
 	
+	public boolean isValidMove() {
+		boolean ret = false;
+		int oc = onCellControl();
+		if(this.myGame.isP1Turn() && oc<5 && oc>=0 && myBoard.getCells()[oc].getNumberOfStones()>0) {
+			ret = true;
+		}
+		if(!this.myGame.isP1Turn() && oc<11 && oc>5 && myBoard.getCells()[oc].getNumberOfStones()>0) {
+			ret = true;
+		}
+		return (ret && this.myGame.waitingForMove());
+	}
+	
 	public void mouseClicked(MouseEvent e) {
 		chosen = this.onCell();
+		this.myGame.setMove(onCellControl(), 1);
 	}
 }

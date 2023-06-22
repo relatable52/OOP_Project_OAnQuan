@@ -1,6 +1,7 @@
 package game.gui;
 
 import game.controls.board.*;
+import game.controls.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -9,6 +10,9 @@ public class GameCanvas extends JPanel{
 	
 	public GameCanvas(Board myBoard) {
 		this.myBD = new BoardDrawer(myBoard, this);
+	}
+	public GameCanvas(Game myGame) {
+		this.myBD = new BoardDrawer(myGame, this);
 	}
 	
 	@Override
