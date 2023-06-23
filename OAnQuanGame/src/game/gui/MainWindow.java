@@ -12,11 +12,20 @@ import game.controls.*;
 
 public class MainWindow extends JFrame{
 	private GameCanvas myGC;
+	private MainMenu myMenu;
+	private int mode;
+	private Game myGame;
 	//private JMenuBar myMB;
 	
 	public MainWindow(Game g) {
-		myGC = new GameCanvas(g);
-		add(myGC, BorderLayout.CENTER);
+		this.myGame = g;
+		myGC = new GameCanvas(this.myGame);
+		myMenu = new MainMenu(this);
+		setLayout(new BorderLayout());
+		mode = 1;
+		
+		add(myMenu, BorderLayout.CENTER);
+		//add(pane, "Game");
 		
 		setVisible(true);
 		setSize(800, 600);
@@ -25,12 +34,19 @@ public class MainWindow extends JFrame{
 		setLocationRelativeTo(null);
 	}
 	
-	public static void main(String[] args) {
-		Game myGame = new Game();
-		MainWindow myWindow = new MainWindow(myGame);
-		
-		while(true) {
-			myWindow.myGC.repaint();
-		}
+	public void newGame() {
+		remove(myMenu);
+		this.myGame.start();
+		add(myGC, BorderLayout.CENTER);
+		setVisible(true);
+		this.mode = 1;
+	}
+	
+	public void redraw() {
+		this.myGC.repaint();
+	}
+	
+	public int getMode() {
+		return mode;
 	}
 }

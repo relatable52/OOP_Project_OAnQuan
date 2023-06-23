@@ -15,17 +15,19 @@ public class Game {
 		myBoard = new Board();
 		player1 = new Player(1);
 		player2 = new Player(2);
-		isP1Turn = true;
+		isP1Turn = false;
 		waitMove = true;
 	}
 	
 	public void start() {
-		t1 = new Thread() {
+		t1 = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while(playGame()) {}
+				while(playGame()) {
+					for(int i = 0; i<500; i++) {}
+				}
 			}
-		};
+		});
 		t1.start();
 	}
 	
@@ -48,15 +50,6 @@ public class Game {
 			}
 		}
 		if(myBoard.gameEnd()) {
-			if(player1.getPoint()>player2.getPoint()) {
-				System.out.println("Player 1 win");
-			}
-			else if(player2.getPoint()>player1.getPoint()) {
-				System.out.println("Player 2 win");
-			}
-			else {
-				System.out.println("Tie");
-			}
 			ret = false;
 		}
 		return ret;
@@ -71,16 +64,55 @@ public class Game {
 	}
 	
 	public void setMove(int ci, int d) {
-		if(isP1Turn) {
-			this.player1.moveSetup(ci, d);
+		if(isValidMove(ci)) {
+			if(isP1Turn) {
+				this.player1.moveSetup(ci, d);
+			}
+			else {
+				this.player2.moveSetup(ci, d);
+			}
+			this.waitMove = false;
 		}
-		else {
-			this.player2.moveSetup(ci, d);
+	}
+	
+	public boolean isValidMove(int oc) {
+		boolean ret = false;
+		if(this.isP1Turn() && oc<5 && oc>=0 && myBoard.getCells()[oc].getNumberOfStones()>0) {
+			ret = true;
 		}
+		if(!this.isP1Turn() && oc<11 && oc>5 && myBoard.getCells()[oc].getNumberOfStones()>0) {
+			ret = true;
+		}
+		return (ret && this.waitingForMove());
 	}
 	
 	public Board getBoard() {
 		return this.myBoard;
 	}
-
+	
+	public Player getPlayer1() {
+		return this.player1;
+	}
+	
+	public Player getPlayer2() {
+		return this.player2;
+	}
+	
+	public boolean gameEnd() {
+		return this.myBoard.gameEnd();
+	}
+	
+	public int getWinner() {
+		int ret = -1;
+		if(player1.getPoint()>player2.getPoint()) {
+			ret = 1;
+		}
+		else if(player2.getPoint()>player1.getPoint()) {
+			ret = 2;
+		}
+		else {
+			ret = 3;
+		}
+		return ret;
+	}
 }

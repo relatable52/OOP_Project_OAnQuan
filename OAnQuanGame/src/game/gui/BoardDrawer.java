@@ -15,7 +15,6 @@ public class BoardDrawer extends Drawer {
 	private int cellSize = 100;
 	private int danRadius = 5;
 	private int quanRadius = 15;
-	private int chosen = -1;
 	
 	public BoardDrawer(Board myBoard, JPanel cp) {
 		super(cp);
@@ -53,10 +52,9 @@ public class BoardDrawer extends Drawer {
 		setup(graphic2d);
 		drawBoardLines(graphic2d);
 		drawStones(graphic2d);
-		if(isValidMove()) {
+		if(this.myGame.isValidMove(onCellControl())) {
 			highlightCell(graphic2d);
 		}
-		mousePressed();
 	}
 	
 	public void setup(Graphics2D g) {
@@ -140,40 +138,49 @@ public class BoardDrawer extends Drawer {
 	}
 	
 	public int onCellControl() {
-		int oc = onCell();
-		return (oc>4)?(oc+1):oc;
+		int ind = onCell();
+		return (ind<5)?ind:(5+(9-(ind-1)));
+	}
+	
+	public int getDir() {
+		int ret = 1;
+		int ind = onCell();
+		int centerX = getWidth()/2 - 2*this.cellSize + (ind%5)*this.cellSize;
+		if(mouseX>centerX == (ind>=0 && ind<5)) {
+			ret = 1;
+		}
+		else{
+			ret = -1;
+		}
+		return ret;
 	}
 	
 	public void highlightCell(Graphics2D g) {
-		g.setColor(Color.BLUE);
-		int i = onCell();
-		if(i>=0) {
-			int x = getWidth()/2 - (5*this.cellSize)/2 + (i%5)*this.cellSize;
-			int y = getHeight()/2 - this.cellSize + (i/5)*this.cellSize;
-			g.drawRect(x, y, this.cellSize, this.cellSize);
+		if(this.myGame.isValidMove(onCellControl())) {
+			int i = onCell();
+			if(i>=0) {
+				int x = getWidth()/2 - (5*this.cellSize)/2 + (i%5)*this.cellSize;
+				int y = getHeight()/2 - this.cellSize + (i/5)*this.cellSize;
+				int cx = x + this.cellSize/2;
+				int cy = y + this.cellSize/2;
+				Polygon leftArrow = new Polygon(new int[] {x+10, x+10, x-10}, new int[] {cy-10, cy+10, cy}, 3);
+				Polygon rightArrow = new Polygon(new int[] {x+cellSize-10, x+cellSize-10, x+cellSize+10}, new int[] {cy-10, cy+10, cy}, 3);
+				g.setColor(Color.BLUE);
+				g.drawRect(x, y, this.cellSize, this.cellSize);
+				g.setColor(Color.GREEN);
+				if(mouseX>cx) {
+					g.drawPolygon(rightArrow);
+					g.fillPolygon(rightArrow);
+				}
+				else {
+					g.drawPolygon(leftArrow);
+					g.fillPolygon(leftArrow);
+				}
+			}
 		}
-		if(chosen>=0) {
-			g.setColor(Color.GREEN);
-			int x = getWidth()/2 - (5*this.cellSize)/2 + (chosen%5)*this.cellSize;
-			int y = getHeight()/2 - this.cellSize + (chosen/5)*this.cellSize;
-			g.drawRect(x, y, this.cellSize, this.cellSize);
-		}
-	}
-	
-	public boolean isValidMove() {
-		boolean ret = false;
-		int oc = onCellControl();
-		if(this.myGame.isP1Turn() && oc<5 && oc>=0 && myBoard.getCells()[oc].getNumberOfStones()>0) {
-			ret = true;
-		}
-		if(!this.myGame.isP1Turn() && oc<11 && oc>5 && myBoard.getCells()[oc].getNumberOfStones()>0) {
-			ret = true;
-		}
-		return (ret && this.myGame.waitingForMove());
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		chosen = this.onCell();
-		this.myGame.setMove(onCellControl(), 1);
+		this.myGame.setMove(onCellControl(), getDir());
 	}
 }
