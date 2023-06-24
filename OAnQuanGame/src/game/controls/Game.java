@@ -9,7 +9,6 @@ public class Game {
 	private Player player2;
 	private boolean isP1Turn;
 	private boolean waitMove;
-	private Thread t1;
 	
 	public Game() {
 		myBoard = new Board();
@@ -19,20 +18,7 @@ public class Game {
 		waitMove = true;
 	}
 	
-	public void start() {
-		t1 = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while(playGame()) {
-					for(int i = 0; i<500; i++) {}
-				}
-			}
-		});
-		t1.start();
-	}
-	
-	public boolean playGame() {
-		boolean ret = true;
+	public void playGame() {
 		if(!waitMove && !myBoard.gameEnd()) {
 			if(isP1Turn) {
 				player1.makeMove(myBoard);
@@ -49,10 +35,6 @@ public class Game {
 				}
 			}
 		}
-		if(myBoard.gameEnd()) {
-			ret = false;
-		}
-		return ret;
 	}
 	
 	public boolean waitingForMove() {

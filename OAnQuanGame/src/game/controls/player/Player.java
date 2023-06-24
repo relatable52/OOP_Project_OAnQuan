@@ -46,7 +46,7 @@ public class Player {
 			}
 		}
 		try {
-			TimeUnit.MILLISECONDS.sleep(200);
+			TimeUnit.MILLISECONDS.sleep(300);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -70,10 +70,12 @@ public class Player {
 	}
 	
 	public void releaseStone(BoardCell bc) {
+		//System.out.println(this.inHand.size());
 		if(this.inHand.size()>0) {
 			ArrayList<Stone> cur = bc.getStonesInCell();
 			cur.add(this.inHand.get(this.inHand.size()-1));
 			this.inHand.remove(this.inHand.size()-1);
+			//System.out.println(this.inHand.size());
 			this.curIndex = Math.floorMod(this.curIndex+dir, 12);
 		}
 	}

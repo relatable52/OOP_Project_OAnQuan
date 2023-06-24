@@ -27,7 +27,16 @@ public class MainMenu extends JPanel{
 				pa.newGame();
 			}
 		};
+		
+		ActionListener openHelp = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pa.showHelp();
+			}
+		};
+		
 		start.addActionListener(startGame);
+		help.addActionListener(openHelp);
 		
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

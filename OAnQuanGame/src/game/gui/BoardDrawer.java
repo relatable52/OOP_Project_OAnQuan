@@ -55,6 +55,7 @@ public class BoardDrawer extends Drawer {
 		if(this.myGame.isValidMove(onCellControl())) {
 			highlightCell(graphic2d);
 		}
+		//graphic2d.drawOval(mouseX, mouseY, quanRadius, quanRadius);
 	}
 	
 	public void setup(Graphics2D g) {
@@ -95,7 +96,7 @@ public class BoardDrawer extends Drawer {
 		int d = (int)(this.cellSize*0.9/(side+1));
 		int centerX = getWidth()/2 - 2*this.cellSize + (ord%5)*this.cellSize;
 		int centerY = getHeight()/2 - this.cellSize/2 + (ord/5)*this.cellSize;
-		for(int i=0; i<num; i++) {
+		for(int i=0; i<stones.size(); i++) {
 			Stone s = stones.get(i);
 			int r = this.danRadius;
 			if(s.isQuan()) {
