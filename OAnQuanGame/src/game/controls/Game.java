@@ -18,6 +18,14 @@ public class Game {
 		waitMove = true;
 	}
 	
+	public void restart() {
+		myBoard.reset();;
+		player1.reset();;
+		player2.reset();;
+		isP1Turn = false;
+		waitMove = true;
+	}
+	
 	public void playGame() {
 		if(!waitMove && !myBoard.gameEnd()) {
 			if(isP1Turn) {
@@ -33,6 +41,14 @@ public class Game {
 					waitMove = true;
 					isP1Turn = !player2.isTurn();
 				}
+			}
+		}
+		if(waitMove && !myBoard.gameEnd() && raiSoi()>0) {
+			if(raiSoi() == 1 && isP1Turn) {
+				player1.raiSoi(myBoard);
+			}
+			if(raiSoi() == 2 && !isP1Turn) {
+				player2.raiSoi(myBoard);
 			}
 		}
 	}
@@ -66,6 +82,34 @@ public class Game {
 			ret = true;
 		}
 		return (ret && this.waitingForMove());
+	}
+	
+	public int raiSoi() {
+		int ret = 0;
+		boolean p1 = false;
+		boolean p2 = false;
+		
+		for(int i = 0; i<5; i++) {
+			if(myBoard.getCells()[i].getNumberOfStones() > 0) {
+				p1 = true;
+			}
+		}
+		
+		for(int i = 6; i<11; i++) {
+			if(myBoard.getCells()[i].getNumberOfStones() > 0) {
+				p2 = true;
+			}
+		}
+		
+		if(!p1) {
+			ret = 1;
+		}
+		
+		if(!p2) {
+			ret = 2;
+		}
+		
+		return ret;
 	}
 	
 	public Board getBoard() {

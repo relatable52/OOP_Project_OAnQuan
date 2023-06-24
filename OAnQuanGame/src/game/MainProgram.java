@@ -11,7 +11,7 @@ public class MainProgram {
 		while(true) {
 			while(myWindow.getMode() == 2) {
 				myWindow.redraw();
-				myGame.playGame();
+				myWindow.playGame();
 			}
 			for(int i=0; i<5000; i++) {}
 		}

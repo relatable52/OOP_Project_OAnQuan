@@ -12,11 +12,19 @@ public class Player {
 	private int playerId;
 	private int dir = -1;
 	private int curIndex = -1;
+	private int penalty = 0;
 	
 	public Player(int id) {
 		this.inHand = new ArrayList<Stone>();
 		this.taken = new ArrayList<Stone>();
 		this.playerId = id;
+	}
+	
+	public void reset() {
+		this.inHand = new ArrayList<Stone>();
+		this.taken = new ArrayList<Stone>();
+		curIndex = -1;
+		penalty = 0;
 	}
 	
 	public void makeMove(Board b) {
@@ -55,6 +63,20 @@ public class Player {
 	
 	public boolean isTurn() {
 		return (this.curIndex>=0);
+	}
+	
+	public void raiSoi(Board b) {
+		if(playerId == 1) {
+			for(int i=0; i<5; i++) {
+				b.getCells()[i].getStonesInCell().add(new Stone(false));
+			}
+		}
+		if(playerId == 2) {
+			for(int i=6; i<11; i++) {
+				b.getCells()[i].getStonesInCell().add(new Stone(false));
+			}
+		}
+		this.penalty ++;
 	}
 	
 	public void pickupStones(BoardCell bc) {
@@ -123,7 +145,7 @@ public class Player {
 		for(Stone s: this.taken) {
 			ret += s.getValue();
 		}
-		return ret;
+		return ret - this.penalty*5;
 	}
 	
 	public int getNumberTakenStones() {

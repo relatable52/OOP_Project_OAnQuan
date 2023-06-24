@@ -13,7 +13,15 @@ public class HelpPage extends JPanel{
 	public HelpPage(MainWindow m) {
 		this.pa = m;
 		this.content = new JLabel("<html>"
-				+ "<h1>Hướng dẫn chơi game<h1>"
+				+ "<h1>How to play</h1>"
+				+ "<p>"
+				+ "Hover the cursor over one of five square in your side.<br>"
+				+ "The square will turn blue if it's a valid move.<br>"
+				+ "An arrow will appear depends on whether the cursor is to the left or the right of the square, indicating the direction of the move.<br>"
+				+ "You click on the square to make your move.<br>"
+				+ "The game ends when both big cells are emptied.<br>"
+				+ "</p>"
+				+ "<h1>Hướng dẫn chơi game</h1>"
 				+ "<p>"
 				+ "Đưa chuột lên một trong năm ô thuộc về bên của bạn.<br>"
 				+ "Ô đó sẽ chuyển màu xanh dương.<br>"
@@ -28,7 +36,7 @@ public class HelpPage extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				pa.backToMain();
-				System.out.println("2");
+				//System.out.println("2");
 			}
 		};
 		this.back.addActionListener(goBack);

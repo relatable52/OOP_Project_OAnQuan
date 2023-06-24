@@ -1,13 +1,9 @@
 package game.gui;
 
 import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.concurrent.*;
 
-import game.controls.board.*;
-import game.controls.player.*;
 import game.controls.*;
 
 public class MainWindow extends JFrame{
@@ -16,17 +12,21 @@ public class MainWindow extends JFrame{
 	private HelpPage myHelp;
 	private int mode;
 	private Game myGame;
+	private CardLayout c;
 	//private JMenuBar myMB;
 	
 	public MainWindow(Game g) {
 		this.myGame = g;
 		this.mode = 1;
-		myGC = new GameCanvas(this.myGame);
+		myGC = new GameCanvas(this.myGame, this);
 		myMenu = new MainMenu(this);
 		myHelp = new HelpPage(this);
-		setLayout(new BorderLayout());
+		c = new CardLayout();
+		setLayout(c);
 		
-		add(myMenu);
+		add("Menu", myMenu);
+		add("GC", myGC);
+		add("Help", myHelp);
 		
 		setVisible(true);
 		setSize(800, 600);
@@ -35,28 +35,31 @@ public class MainWindow extends JFrame{
 		setLocationRelativeTo(null);
 	}
 	
+	public void playGame() {
+		this.myGame.playGame();
+	}
+	
 	public void newGame() {
-		remove(myMenu);
-		add(myGC, BorderLayout.CENTER);
-		setVisible(true);
+		this.myGame.restart();
+		c.show(getContentPane(), "GC");
 		mode = 2;
-		System.out.println("1");
 	}
 	
 	public void showHelp() {
-		remove(myMenu);
-		add(myHelp, BorderLayout.CENTER);
-		setVisible(true);
+		c.show(getContentPane(), "Help");
 		mode = 3;
-		System.out.println("1");
 	}
 	
 	public void backToMain() {
-		remove(myHelp);
-		add(myMenu);
-		setVisible(true);
+		c.show(getContentPane(), "Menu");
 		mode = 4;
-		//System.out.println("1");
+	}
+	
+	public void exitGame() {
+		int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Exit messge", JOptionPane.YES_NO_OPTION);
+		if(confirmed == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
 	}
 	
 	public void redraw() {

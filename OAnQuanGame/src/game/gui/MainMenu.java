@@ -3,7 +3,6 @@ package game.gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
 
 public class MainMenu extends JPanel{
 	private JButton start;
@@ -35,8 +34,16 @@ public class MainMenu extends JPanel{
 			}
 		};
 		
+		ActionListener exitGame = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pa.exitGame();
+			}
+		};
+		
 		start.addActionListener(startGame);
 		help.addActionListener(openHelp);
+		exit.addActionListener(exitGame);
 		
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

@@ -40,7 +40,7 @@ public class PlayerDrawer extends Drawer{
 		g.drawString("Player 1", width/2 - metrics.stringWidth("Player 1")/2, height-d/5+metrics.getHeight()/4);
 		g.drawString(p2, width/2 - metrics.stringWidth(p2)/2, height-d/2+metrics.getHeight()/4);
 		
-		g.setColor(Color.GREEN);
+		g.setColor(Color.MAGENTA);
 		g.setFont(new Font("SansSerif", Font.BOLD, 20));
 		if(!this.myGame.gameEnd()) {
 			if(this.myGame.isP1Turn()) {
